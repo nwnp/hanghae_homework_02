@@ -3,18 +3,17 @@ const User = require("../models/user");
 
 const get = async (req, res, next) => {
   try {
-    const pageNum = Number(req.params.id);
-    let offset = pageNum;
-    if (pageNum > 1) {
-      offset = 0 + (pageNum - 1) * 10;
-    }
+    // const pageNum = Number(req.params.id);
+    const limit = 10;
+    let offset = 0 + (Number(req.params.id) - 1) * limit;
     const result = await Post.findAll({
       include: {
         model: User,
         attributes: ["id", "nickname"],
       },
-      offset: offset - 1,
+      offset: offset,
       limit: 10,
+      order: [["createdAt", "DESC"]],
     });
     return res.status(200).json({ result });
   } catch (error) {
