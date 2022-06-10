@@ -32,7 +32,7 @@ const passwordValidate = (req, res, next) => {
   }
   const result = {
     success: false,
-    error: "비밀번호는 최소 3자 이상입니다.",
+    error: "비밀번호는 최소 4자 이상입니다.",
   };
   return res.status(400).json({ result });
 };

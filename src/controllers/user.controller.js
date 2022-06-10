@@ -16,6 +16,16 @@ const register = async (req, res, next) => {
       });
     }
 
+    // password에 nickname값이 있는지 체크
+    if (password.includes(nickname)) {
+      return res.status(400).json({
+        result: {
+          success: false,
+          errorMessage: "닉네임이 들어간 패스워드는 사용할 수 없습니다.",
+        },
+      });
+    }
+
     // email 중복체크
     const existEmail = await User.findOne({ where: { email } });
     if (existEmail) {
@@ -55,6 +65,9 @@ const register = async (req, res, next) => {
   }
 };
 
+const login = async (req, res, next) => {};
+
 module.exports = {
   register,
+  login,
 };

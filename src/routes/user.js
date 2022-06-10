@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const userRouter = require("../controllers/user.controller");
+const userController = require("../controllers/user.controller");
 const { body } = require("express-validator");
 const {
   nicknameValidate,
@@ -21,10 +21,13 @@ router.post(
     nicknameValidate,
     body("email").trim().notEmpty().bail().isEmail(),
     emailValidate,
-    body("password").trim().notEmpty().bail().isLength({ min: 3 }),
+    body("password").trim().notEmpty().bail().isLength({ min: 4 }),
     passwordValidate,
   ],
-  userRouter.register
+  userController.register
 );
+
+// login
+router.post("/login", userController.login);
 
 module.exports = router;
