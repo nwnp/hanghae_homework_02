@@ -7,10 +7,12 @@ const {
   emailValidate,
   passwordValidate,
 } = require("../middlewares/validator");
+const isLoggedIn = require("../middlewares/isLoggedIn");
 
 // signup
 router.post(
   "/register",
+  isLoggedIn,
   [
     body("nickname")
       .trim()
@@ -28,6 +30,7 @@ router.post(
 );
 
 // login
-router.post("/login", userController.login);
+// router.post("/login", isLoggedIn, userController.login);
+router.post("/login", isLoggedIn, userController.login);
 
 module.exports = router;
