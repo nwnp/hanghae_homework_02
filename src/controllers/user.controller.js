@@ -1,6 +1,7 @@
 const { registerValidate } = require("../middlewares/validator");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const register = async (req, res, next) => {
   try {
@@ -65,7 +66,51 @@ const register = async (req, res, next) => {
   }
 };
 
-const login = async (req, res, next) => {};
+const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    // email check
+    const exUser = await User.findOne({ where: { email } });
+    if (!exUser) {
+      return res.status(400).json({
+        result: {
+          success: false,
+          errorMessage: "존재하지 않는 회원입니다.",
+        },
+      });
+    }
+
+    const matched = bcrypt.compareSync(password, exUser.password);
+    if (matched) {
+      const user = {
+        id: exUser.dataValues.id,
+        nickname: exUser.dataValues.nickname,
+        email: exUser.dataValues.email,
+      };
+      const token = jwt.sign({ ...user }, process.env.MY_SECRET_KEY);
+      res.locals.user = {
+        ...user,
+        token,
+      };
+      return res.status(200).json({
+        result: {
+          success: true,
+          token,
+        },
+      });
+    } else {
+      return res.status(400).json({
+        result: {
+          success: false,
+          errorMessage: "비밀번호가 틀렸습니다.",
+        },
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 module.exports = {
   register,
