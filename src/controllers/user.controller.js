@@ -1,4 +1,3 @@
-const { registerValidate } = require("../middlewares/validator");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -76,7 +75,7 @@ const login = async (req, res, next) => {
       return res.status(400).json({
         result: {
           success: false,
-          errorMessage: "존재하지 않는 회원입니다.",
+          errorMessage: "이메일 또는 패스워드가 틀렸습니다.",
         },
       });
     }
@@ -103,7 +102,7 @@ const login = async (req, res, next) => {
       return res.status(400).json({
         result: {
           success: false,
-          errorMessage: "비밀번호가 틀렸습니다.",
+          errorMessage: "이메일 또는 패스워드가 틀렸습니다.",
         },
       });
     }
