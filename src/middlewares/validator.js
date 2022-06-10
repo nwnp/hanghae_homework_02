@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 
-const registerValidate = (req, res, next) => {
+const nicknameValidate = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     return next();
@@ -13,4 +13,28 @@ const registerValidate = (req, res, next) => {
   return res.status(400).json({ result });
 };
 
-module.exports = { registerValidate };
+const emailValidate = (req, res, next) => {
+  const errors = validationResult(req);
+  if (errors.isEmpty()) {
+    return next();
+  }
+  const result = {
+    success: false,
+    error: "올바른 형식의 이메일을 적어주세요.",
+  };
+  return res.status(400).json({ result });
+};
+
+const passwordValidate = (req, res, next) => {
+  const errors = validationResult(req);
+  if (errors.isEmpty()) {
+    return next();
+  }
+  const result = {
+    success: false,
+    error: "비밀번호는 최소 3자 이상입니다.",
+  };
+  return res.status(400).json({ result });
+};
+
+module.exports = { nicknameValidate, emailValidate, passwordValidate };
