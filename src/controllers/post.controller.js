@@ -1,5 +1,6 @@
 const Post = require("../models/post");
 const User = require("../models/user");
+const Like = require("../models/like");
 
 const get = async (req, res, next) => {
   try {
@@ -10,6 +11,7 @@ const get = async (req, res, next) => {
       include: {
         model: User,
         attributes: ["id", "nickname"],
+        required: false,
       },
       offset: offset,
       limit: 10,
@@ -36,4 +38,41 @@ const register = async (req, res, next) => {
   }
 };
 
-module.exports = { get, register };
+const detail = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const exPost = await Post.findOne({
+      where: { id },
+      include: [{ model: Like }],
+      required: false,
+    });
+    if (!exPost) {
+      return res.status(404).json({
+        result: {
+          success: false,
+          errorMessage: "존재하지 않는 게시글",
+        },
+      });
+    }
+
+    const likes = exPost.dataValues.Likes;
+    const { title, content, image, userId } = exPost.dataValues;
+    return res.status(200).json({
+      result: {
+        success: true,
+        likeCount: likes.length,
+        title,
+        content,
+        image,
+        userId,
+        postId: Number(id),
+      },
+    });
+  } catch (error) {
+    return res.status(400).json({
+      result: { success: false },
+    });
+  }
+};
+
+module.exports = { get, register, detail };

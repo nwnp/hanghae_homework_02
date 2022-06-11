@@ -3,7 +3,16 @@ const Sequelize = require("sequelize");
 module.exports = class Like extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
-      {},
+      {
+        userId: {
+          type: Sequelize.INTEGER,
+          primaryKey: true,
+        },
+        postId: {
+          type: Sequelize.INTEGER,
+          primaryKey: true,
+        },
+      },
       {
         sequelize,
         timestamps: false,
