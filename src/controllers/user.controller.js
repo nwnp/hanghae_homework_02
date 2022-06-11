@@ -106,11 +106,11 @@ const login = async (req, res, next) => {
         email: exUser.dataValues.email,
       };
       const token = jwt.sign({ ...user }, process.env.MY_SECRET_KEY);
+
       res.locals.user = {
         ...user,
         token,
       };
-      console.log(res.locals.user.id);
       return res.status(200).json({
         result: {
           success: true,

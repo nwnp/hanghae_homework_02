@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const corsConfig = require("./config/corsConfig.json");
+const cookieParser = require("cookie-parser");
 const { sequelize } = require("./models");
 
 dotenv.config();
@@ -19,15 +20,16 @@ sequelize
 const app = express();
 const PORT = process.env.PORT;
 
-const indexRouter = require("./routes/index");
-const userRouter = require("./routes/user");
-const postRouter = require("./routes/post");
-
 app.use(morgan("dev"));
 app.use(cors(corsConfig));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cookieParser());
+
+const indexRouter = require("./routes/index");
+const userRouter = require("./routes/user");
+const postRouter = require("./routes/post");
 
 app.use("/", indexRouter);
 app.use("/api", [userRouter, postRouter]);
