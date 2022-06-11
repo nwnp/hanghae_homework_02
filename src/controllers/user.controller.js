@@ -110,6 +110,7 @@ const login = async (req, res, next) => {
         ...user,
         token,
       };
+      console.log(res.locals.user.id);
       return res.status(200).json({
         result: {
           success: true,

@@ -1,6 +1,7 @@
 const Post = require("../models/post");
 const User = require("../models/user");
 const Like = require("../models/like");
+const { Op } = require("sequelize");
 
 const get = async (req, res, next) => {
   try {
@@ -75,4 +76,31 @@ const detail = async (req, res, next) => {
   }
 };
 
-module.exports = { get, register, detail };
+const like = async (req, res, next) => {
+  // 되어 있으면 좋아요 취소
+  const postId = Number(req.params.id);
+  const { userId } = req.body;
+  const post = await Post.findOne({
+    include: {
+      model: Like,
+      attributes: ["userId", "postId"],
+      where: { userId: userId },
+    },
+    where: { id: postId },
+  });
+
+  if (post === null) {
+    const result = await Like.create({ userId, postId });
+    return res.status(200).json({
+      result: {
+        success: true,
+        result,
+      },
+    });
+  } else {
+    const result = await Like.destroy({ where: { postId } });
+    return res.status(201).json({ result });
+  }
+};
+
+module.exports = { get, register, detail, like };
