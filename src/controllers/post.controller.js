@@ -94,4 +94,80 @@ const like = async (req, res, next) => {
   }
 };
 
-module.exports = { get, register, detail, like };
+// DELETE post delete
+const deletePost = async (req, res, next) => {
+  try {
+    const { id, userId } = req.params;
+    const post = await Post.findOne({ where: { id } });
+    if (!post) {
+      return res.status(400).json({
+        result: {
+          success: true,
+          errorMessage: "존재하지 않는 게시글",
+        },
+      });
+    }
+
+    if (Number(userId) !== post.dataValues.userId) {
+      return res.status(401).json({
+        result: {
+          success: false,
+          errorMessage: "다른 회원의 게시글은 삭제할 수 없습니다.",
+        },
+      });
+    }
+
+    await Post.destroy({ where: { id } });
+
+    return res.status(200).json({
+      result: {
+        success: true,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// PUT post update
+const update = async (req, res, next) => {
+  try {
+    const { id, userId } = req.params;
+    const { title, content, image } = req.body;
+    const post = await Post.findOne({ where: { id } });
+    if (!post) {
+      return res.status(400).json({
+        result: {
+          success: true,
+          errorMessage: "존재하지 않는 게시글",
+        },
+      });
+    }
+
+    if (Number(userId) !== post.dataValues.userId) {
+      return res.status(401).json({
+        result: {
+          success: false,
+          errorMessage: "다른 회원의 게시글은 수정할 수 없습니다.",
+        },
+      });
+    }
+
+    const updatedPost = await Post.update(
+      { title, content, image },
+      { where: { id } }
+    );
+    return res.status(200).json({ updatedPost });
+  } catch (error) {
+    return res.status(500).json({ error: error });
+  }
+};
+
+module.exports = {
+  get,
+  register,
+  detail,
+  like,
+  deletePost,
+  update,
+};
