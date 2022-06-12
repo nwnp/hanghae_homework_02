@@ -33,6 +33,7 @@ const register = async (req, res, next) => {
 const detail = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const paramUserId = req.params.userId;
     const exPost = await Post.findOne({
       where: { id },
       include: [{ model: Like }],
@@ -48,6 +49,8 @@ const detail = async (req, res, next) => {
     }
 
     const likes = exPost.dataValues.Likes;
+    const likeByMe =
+      likes[0].dataValues.userId === Number(paramUserId) ? true : false;
     const { title, content, image, userId } = exPost.dataValues;
     return res.status(200).json({
       result: {
@@ -58,6 +61,7 @@ const detail = async (req, res, next) => {
         image,
         userId,
         postId: Number(id),
+        likeByMe,
       },
     });
   } catch (error) {
@@ -71,7 +75,7 @@ const detail = async (req, res, next) => {
 const like = async (req, res, next) => {
   // 되어 있으면 좋아요 취소
   const postId = Number(req.params.id);
-  const { userId } = req.body;
+  const userId = res.locals.user.id;
   const post = await Post.findOne({
     include: {
       model: Like,
@@ -98,7 +102,8 @@ const like = async (req, res, next) => {
 // DELETE post delete
 const deletePost = async (req, res, next) => {
   try {
-    const { id, userId } = req.params;
+    const { id } = req.params;
+    const userId = res.locals.user.id;
     const post = await Post.findOne({ where: { id } });
     if (!post) {
       return res.status(400).json({
@@ -144,7 +149,8 @@ const deletePost = async (req, res, next) => {
 // PUT post update
 const update = async (req, res, next) => {
   try {
-    const { id, userId } = req.params;
+    const { id } = req.params;
+    const userId = res.locals.user.id;
     const { title, content, image } = req.body;
     const post = await Post.findOne({ where: { id } });
     if (!post) {
