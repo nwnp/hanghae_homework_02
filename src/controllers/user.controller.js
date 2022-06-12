@@ -13,7 +13,7 @@ const register = async (req, res, next) => {
       });
     }
 
-    const { nickname, email, password, passwordCheck } = req.body;
+    const { nickname, email, password, passwordCheck, role } = req.body;
 
     // password check
     if (password !== passwordCheck) {
@@ -62,11 +62,13 @@ const register = async (req, res, next) => {
       nickname,
       email,
       password: hashedPassword,
+      role,
     });
     const result = {
       id: newUser.id,
       nickname: newUser.nickname,
       email: newUser.email,
+      role: newUser.role,
     };
     return res.status(201).json({ result });
   } catch (err) {
@@ -104,13 +106,9 @@ const login = async (req, res, next) => {
         id: exUser.dataValues.id,
         nickname: exUser.dataValues.nickname,
         email: exUser.dataValues.email,
+        role: exUser.dataValues.role,
       };
       const token = jwt.sign({ ...user }, process.env.MY_SECRET_KEY);
-
-      res.locals.user = {
-        ...user,
-        token,
-      };
       return res.status(200).json({
         result: {
           success: true,

@@ -7,7 +7,8 @@ const authMiddleware = require("../middlewares/auth");
 router.get("/post/", postController.get);
 
 // post 등록
-router.post("/post", authMiddleware, postController.register);
+// router.post("/post", authMiddleware, postController.register);
+router.post("/post", postController.register);
 
 // put 수정
 router.put("/post/:id/:userId", postController.update);

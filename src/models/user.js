@@ -5,8 +5,8 @@ module.exports = class User extends Sequelize.Model {
     return super.init(
       {
         role: {
-          type: Sequelize.INTEGER,
-          defaultValue: 0,
+          type: Sequelize.STRING(10),
+          defaultValue: "user",
         },
         nickname: {
           type: Sequelize.STRING(100),

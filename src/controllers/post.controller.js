@@ -1,5 +1,6 @@
 const Post = require("../models/post");
 const Like = require("../models/like");
+const User = require("../models/user");
 
 // GET All posts
 const get = async (req, res, next) => {
@@ -104,6 +105,17 @@ const deletePost = async (req, res, next) => {
         result: {
           success: true,
           errorMessage: "존재하지 않는 게시글",
+        },
+      });
+    }
+
+    const exUser = await User.findOne({ where: { id: userId } });
+    if (exUser.dataValues.role === "admin") {
+      await Post.destroy({ where: { id } });
+      return res.status(201).json({
+        result: {
+          success: true,
+          message: "관리자의 권한으로 삭제합니다.",
         },
       });
     }
