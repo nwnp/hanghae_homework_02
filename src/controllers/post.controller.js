@@ -1,29 +1,18 @@
 const Post = require("../models/post");
-const User = require("../models/user");
 const Like = require("../models/like");
-const { Op } = require("sequelize");
 
+// GET All posts
 const get = async (req, res, next) => {
   try {
-    // const pageNum = Number(req.params.id);
-    const limit = 10;
-    let offset = 0 + (Number(req.params.id) - 1) * limit;
-    const result = await Post.findAll({
-      include: {
-        model: User,
-        attributes: ["id", "nickname"],
-        required: false,
-      },
-      offset: offset,
-      limit: 10,
-      order: [["createdAt", "DESC"]],
-    });
-    return res.status(200).json({ result });
+    const posts = await Post.findAll({});
+    posts.reverse(); // 최신순으로 등록된 게시글을 출력하기 위해 reverse()
+    return res.status(200).json({ result: posts });
   } catch (error) {
-    return res.status(400).json({ error });
+    console.error(error);
   }
 };
 
+// POST post register
 const register = async (req, res, next) => {
   try {
     const { title, content, image, userId } = req.body;
@@ -39,6 +28,7 @@ const register = async (req, res, next) => {
   }
 };
 
+// GET 특정 post
 const detail = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -76,6 +66,7 @@ const detail = async (req, res, next) => {
   }
 };
 
+// POST like
 const like = async (req, res, next) => {
   // 되어 있으면 좋아요 취소
   const postId = Number(req.params.id);
