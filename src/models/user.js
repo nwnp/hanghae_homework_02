@@ -4,6 +4,10 @@ module.exports = class User extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
+        role: {
+          type: Sequelize.INTEGER,
+          defaultValue: 0,
+        },
         nickname: {
           type: Sequelize.STRING(100),
           allowNull: false,

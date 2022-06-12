@@ -10,7 +10,7 @@ router.get("/post/", postController.get);
 router.post("/post", authMiddleware, postController.register);
 
 // put 수정
-router.put("/post/:id/:userId", postController.putUpdate);
+router.put("/post/:id/:userId", postController.update);
 
 // post 삭제
 router.delete("/post/:id/:userId", postController.deletePost);
