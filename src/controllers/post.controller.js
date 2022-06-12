@@ -1,6 +1,5 @@
 const Post = require("../models/post");
 const Like = require("../models/like");
-const User = require("../models/user");
 
 // GET All posts
 const get = async (req, res, next) => {
@@ -73,7 +72,6 @@ const detail = async (req, res, next) => {
 
 // POST like
 const like = async (req, res, next) => {
-  // 되어 있으면 좋아요 취소
   const postId = Number(req.params.id);
   const userId = res.locals.user.id;
   const post = await Post.findOne({
@@ -105,6 +103,7 @@ const deletePost = async (req, res, next) => {
     const { id } = req.params;
     const userId = res.locals.user.id;
     const post = await Post.findOne({ where: { id } });
+    // 게시글이 존재하지 않을 때
     if (!post) {
       return res.status(400).json({
         result: {
@@ -113,9 +112,8 @@ const deletePost = async (req, res, next) => {
         },
       });
     }
-
-    const exUser = await User.findOne({ where: { id: userId } });
-    if (exUser.dataValues.role === "admin") {
+    // 관리자일 때
+    if (res.locals.user.role === "admin") {
       await Post.destroy({ where: { id } });
       return res.status(201).json({
         result: {
@@ -124,7 +122,7 @@ const deletePost = async (req, res, next) => {
         },
       });
     }
-
+    // 다른 유저의 게시글을 삭제하려고 할 때
     if (Number(userId) !== post.dataValues.userId) {
       return res.status(401).json({
         result: {
@@ -133,9 +131,7 @@ const deletePost = async (req, res, next) => {
         },
       });
     }
-
     await Post.destroy({ where: { id } });
-
     return res.status(200).json({
       result: {
         success: true,
