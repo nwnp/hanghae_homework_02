@@ -34,12 +34,11 @@ const detail = async (req, res, next) => {
   try {
     const { id } = req.params;
     const paramUserId = res.locals.user.id;
-    const exPost = await Post.findOne({
+    const checkPost = await Post.findOne({
       where: { id },
       include: [{ model: Like }],
-      required: false,
     });
-    if (!exPost) {
+    if (!checkPost) {
       return res.status(404).json({
         result: {
           success: false,
@@ -48,12 +47,31 @@ const detail = async (req, res, next) => {
       });
     }
 
-    const likes = exPost.dataValues.Likes;
-    console.log(likes);
-    let likeByMe = likes[0].dataValues.userId === paramUserId ? true : false;
-    if (likes.length === 0) {
-      likeByMe = false;
+    const exPost = await Post.findOne({
+      where: { id },
+      include: [{ model: Like, where: { userId: paramUserId } }],
+    });
+
+    if (!exPost) {
+      const likeByMe = false;
+      const likes = checkPost.dataValues.Likes;
+      const { title, content, image, userId } = checkPost.dataValues;
+      return res.status(200).json({
+        result: {
+          success: true,
+          likeCount: likes.length,
+          title,
+          content,
+          image,
+          userId,
+          postId: Number(id),
+          likeByMe,
+        },
+      });
     }
+
+    const likes = checkPost.dataValues.Likes;
+    const likeByMe = likes[0].dataValues.userId === paramUserId ? true : false;
     const { title, content, image, userId } = exPost.dataValues;
     return res.status(200).json({
       result: {
@@ -92,12 +110,16 @@ const like = async (req, res, next) => {
     return res.status(200).json({
       result: {
         success: true,
-        result,
+        message: "좋아요 성공",
+        userId: result.userId,
+        postId: result.postId,
       },
     });
   } else {
-    const result = await Like.destroy({ where: { postId } });
-    return res.status(201).json({ result });
+    await Like.destroy({ where: { postId } });
+    return res
+      .status(201)
+      .json({ result: { success: true, message: "좋아요 취소" } });
   }
 };
 
