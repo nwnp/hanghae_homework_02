@@ -78,15 +78,6 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    if (res.locals.user) {
-      return res.status(404).json({
-        result: {
-          success: false,
-          errorMessage: "이미 로그인한 상태입니다.",
-        },
-      });
-    }
-
     const { email, password } = req.body;
 
     // email check
