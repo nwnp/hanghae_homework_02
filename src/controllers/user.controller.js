@@ -26,7 +26,7 @@ const register = async (req, res, next) => {
     }
 
     // password에 nickname값이 있는지 체크
-    if (password.includes(nickname)) {
+    if (password.includes(nickname) || nickname.includes(password)) {
       return res.status(401).json({
         result: {
           success: false,
