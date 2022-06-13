@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const postController = require("../controllers/post.controller");
 const authMiddleware = require("../middlewares/auth");
+const dto = require("../middlewares/detail.dto");
 
 // posts list
 router.get("/post/", postController.get);
@@ -16,7 +17,7 @@ router.put("/post/:id", authMiddleware, postController.update);
 router.delete("/post/:id", authMiddleware, postController.deletePost);
 
 // 특정 post 가져오기
-router.get("/post/detail/:id/:userId", postController.detail);
+router.get("/post/detail/:id", dto, postController.detail);
 
 // 좋아요 등록 & 취소
 // router.post("/post/:id/like", authMiddleware, postController.like);

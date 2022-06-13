@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
     return res.status(401).send({
       result: {
         success: false,
-        errorMessage: "로그인2이 필요합니다.",
+        errorMessage: "로그인이 필요합니다.",
       },
     });
   }

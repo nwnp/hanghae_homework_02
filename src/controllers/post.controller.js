@@ -15,7 +15,8 @@ const get = async (req, res, next) => {
 // POST post register
 const register = async (req, res, next) => {
   try {
-    const { title, content, image, userId } = req.body;
+    const { title, content, image } = req.body;
+    const userId = res.locals.user.id;
     const result = await Post.create({
       title,
       content,
@@ -32,7 +33,7 @@ const register = async (req, res, next) => {
 const detail = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const paramUserId = req.params.userId;
+    const paramUserId = res.locals.user.id;
     const exPost = await Post.findOne({
       where: { id },
       include: [{ model: Like }],
@@ -48,8 +49,11 @@ const detail = async (req, res, next) => {
     }
 
     const likes = exPost.dataValues.Likes;
-    const likeByMe =
-      likes[0].dataValues.userId === Number(paramUserId) ? true : false;
+    console.log(likes);
+    let likeByMe = likes[0].dataValues.userId === paramUserId ? true : false;
+    if (likes.length === 0) {
+      likeByMe = false;
+    }
     const { title, content, image, userId } = exPost.dataValues;
     return res.status(200).json({
       result: {
