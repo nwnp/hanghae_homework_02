@@ -29,7 +29,4 @@ router.get("/post/detail/:id", dto, postController.detail);
 // router.post("/post/:id/like", authMiddleware, postController.like);
 router.post("/post/:id/like", authMiddleware, postController.like);
 
-// image upload
-router.post("/post/image", postController.imageTest);
-
 module.exports = router;
