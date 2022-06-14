@@ -21,6 +21,7 @@ const register = async (req, res, next) => {
       title,
       content,
       userId,
+      image: req.file.location,
     });
     return res.status(200).json({ result });
   } catch (error) {
