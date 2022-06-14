@@ -192,11 +192,8 @@ const update = async (req, res, next) => {
       });
     }
 
-    const updatedPost = await Post.update(
-      { title, content, image },
-      { where: { id } }
-    );
-    return res.status(200).json({ updatedPost });
+    await Post.update({ title, content, image }, { where: { id } });
+    return res.status(200).json({ result: { success: true } });
   } catch (error) {
     return res.status(500).json({ error: error });
   }
