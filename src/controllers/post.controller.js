@@ -21,12 +21,13 @@ const get = async (req, res, next) => {
 // POST post register
 const register = async (req, res, next) => {
   try {
-    const { title, content } = req.body;
+    const { title, content, layout } = req.body;
     const userId = res.locals.user.id;
     const result = await Post.create({
       title,
       content,
       userId,
+      layout,
       image: req.file.location,
       imageKey: req.file.key,
     });
@@ -103,6 +104,15 @@ const detail = async (req, res, next) => {
 const like = async (req, res, next) => {
   const postId = Number(req.params.id);
   const userId = res.locals.user.id;
+  const exPost = await Post.findOne({ where: { id: postId } });
+  if (!exPost) {
+    return res.status(401).json({
+      result: {
+        success: false,
+        errorMessage: "존재하지 않는 게시글입니다.",
+      },
+    });
+  }
   const post = await Post.findOne({
     include: {
       model: Like,
@@ -207,7 +217,7 @@ const update = async (req, res, next) => {
   try {
     const { id } = req.params;
     const userId = res.locals.user.id;
-    const { title, content, image } = req.body;
+    const { title, content, image, layout } = req.body;
     const post = await Post.findOne({ where: { id } });
     if (!post) {
       return res.status(400).json({
@@ -227,7 +237,7 @@ const update = async (req, res, next) => {
       });
     }
 
-    await Post.update({ title, content, image }, { where: { id } });
+    await Post.update({ title, content, image, layout }, { where: { id } });
     return res.status(200).json({ result: { success: true } });
   } catch (error) {
     return res.status(500).json({ error: error });
