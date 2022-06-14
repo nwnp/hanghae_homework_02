@@ -14,8 +14,8 @@ const upload = multer({
     acl: "public-read",
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: function (req, file, done) {
-      const fileUrl = `Data.now()_${file.originalname}`;
-      console.log(this.key);
+      const fileUrl = `${Date.now()}_${file.originalname}`;
+      console.log(file);
       done(null, `${fileUrl}`);
     },
   }),

@@ -5,25 +5,6 @@ const authMiddleware = require("../middlewares/auth");
 const dto = require("../middlewares/detail.dto");
 const upload = require("../modules/upload");
 
-// img
-/**
- * @swagger
- * /api/img:
- *   post:
- *     description: 이미지 저장
- *     tags: [Post]
- *     produces:
- *     - "application/json"
- *     parameters:
- *     - name: "image"
- *       type: "string"
- *     responses:
- *       "200":
- *         description: "successful operation"
- *
- */
-router.post("/img", upload.single("file"), postController.image);
-
 // posts list
 /**
  * @swagger
@@ -59,7 +40,12 @@ router.get("/post", postController.get);
  *         description: "successful operation"
  *
  */
-router.post("/post", authMiddleware, postController.register);
+router.post(
+  "/post",
+  authMiddleware,
+  upload.single("image"),
+  postController.register
+);
 
 // put 수정
 /**

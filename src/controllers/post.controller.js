@@ -199,10 +199,6 @@ const update = async (req, res, next) => {
   }
 };
 
-const image = async (req, res, next) => {
-  res.send({ file: req.file });
-};
-
 module.exports = {
   get,
   register,
@@ -210,5 +206,4 @@ module.exports = {
   like,
   deletePost,
   update,
-  image,
 };
