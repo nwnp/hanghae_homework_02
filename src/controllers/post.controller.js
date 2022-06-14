@@ -1,5 +1,11 @@
 const Post = require("../models/post");
 const Like = require("../models/like");
+const aws = require("aws-sdk");
+
+const s3 = new aws.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+});
 
 // GET All posts
 const get = async (req, res, next) => {
@@ -22,6 +28,7 @@ const register = async (req, res, next) => {
       content,
       userId,
       image: req.file.location,
+      imageKey: req.file.key,
     });
     return res.status(200).json({ result });
   } catch (error) {
@@ -140,6 +147,19 @@ const deletePost = async (req, res, next) => {
     }
     // 관리자일 때
     if (res.locals.user.role === "admin") {
+      // S3 내 이미지 삭제
+      s3.deleteObject(
+        {
+          Bucket: "jinsfirstbucket",
+          Key: post.dataValues.imageKey,
+        },
+        (err, data) => {
+          if (err) {
+            throw err;
+          }
+          console.log("s3 deleteObject ", data);
+        }
+      );
       await Post.destroy({ where: { id } });
       return res.status(201).json({
         result: {
@@ -157,6 +177,20 @@ const deletePost = async (req, res, next) => {
         },
       });
     }
+
+    // S3 내 이미지 삭제
+    s3.deleteObject(
+      {
+        Bucket: "jinsfirstbucket",
+        Key: post.dataValues.imageKey,
+      },
+      (err, data) => {
+        if (err) {
+          throw err;
+        }
+        console.log("s3 deleteObject ", data);
+      }
+    );
     await Post.destroy({ where: { id } });
     return res.status(200).json({
       result: {
