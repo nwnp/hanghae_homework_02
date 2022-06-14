@@ -10,6 +10,10 @@
     - DELETE /api/post/:id 게시글 삭제
     - POST /api/post/:id/like 게시글 좋아요 & 좋아요 취소
 - 회원관리
+  - jwt를 사용해서 유저정보 암호화 및 검증
+  - 로그인하면 token을 response
+  - 로그인 된 회원이면 로그인 요청을 할 수 없도록 예외처리
+  - 로그인 된 회원이면 회원가입 할 수 없도록 예외처리
 
 ## Used package
 
