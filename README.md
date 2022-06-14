@@ -27,8 +27,6 @@
 - express-validator
 - jsonwebtoken
 
-## Install
-
 ## ERD
 
 <img src="./hw2_erd.png">
