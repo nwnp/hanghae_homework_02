@@ -13,9 +13,10 @@ const upload = multer({
     bucket: "jinsfirstbucket",
     acl: "public-read",
     contentType: multerS3.AUTO_CONTENT_TYPE,
-    key: function (req, file, cb) {
-      cb(null, `${Date.now()}_${file.originalname}`);
-      console.log(file);
+    key: function (req, file, done) {
+      const fileUrl = `Data.now()_${file.originalname}`;
+      console.log(this.key);
+      done(null, `${fileUrl}`);
     },
   }),
 });

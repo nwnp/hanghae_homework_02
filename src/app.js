@@ -5,6 +5,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const corsConfig = require("./config/corsConfig.json");
 const cookieParser = require("cookie-parser");
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+const swaggerConfig = require("./config/swaggerConfig");
 const { sequelize } = require("./models");
 
 dotenv.config();
@@ -20,6 +23,8 @@ sequelize
 const app = express();
 const PORT = process.env.PORT;
 
+const specs = swaggerJsdoc(swaggerConfig);
+
 app.use(morgan("dev"));
 app.use(cors(corsConfig));
 app.use(bodyParser.json());
@@ -32,6 +37,7 @@ const userRouter = require("./routes/user");
 const postRouter = require("./routes/post");
 
 app.use("/", indexRouter);
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use("/api", [userRouter, postRouter]);
 
 app.listen(PORT, () => {

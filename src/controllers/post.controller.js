@@ -15,12 +15,11 @@ const get = async (req, res, next) => {
 // POST post register
 const register = async (req, res, next) => {
   try {
-    const { title, content, image } = req.body;
+    const { title, content } = req.body;
     const userId = res.locals.user.id;
     const result = await Post.create({
       title,
       content,
-      image,
       userId,
     });
     return res.status(200).json({ result });
@@ -203,6 +202,10 @@ const update = async (req, res, next) => {
   }
 };
 
+const image = async (req, res, next) => {
+  res.send({ file: req.file });
+};
+
 module.exports = {
   get,
   register,
@@ -210,4 +213,5 @@ module.exports = {
   like,
   deletePost,
   update,
+  image,
 };
