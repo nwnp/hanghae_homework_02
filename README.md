@@ -33,7 +33,7 @@
 
 ## ERD
 
-<img src="./uploads/hw_erd.png">
+<img src="./hw2_erd.png">
 
 ```console
 $ npm install
