@@ -31,6 +31,10 @@
 
 ## Install
 
+## ERD
+
+<img src="./uploads/hw_erd.png">
+
 ```console
 $ npm install
 ```
