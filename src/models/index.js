@@ -7,7 +7,6 @@ dotenv.config();
 const User = require("./user.js");
 const Post = require("./post");
 const Like = require("./like");
-const Image = require("./image");
 
 // db setting
 const db = {
@@ -29,16 +28,13 @@ db.sequelize = sequelize;
 db.User = User;
 db.Post = Post;
 db.Like = Like;
-db.Image = Image;
 
 User.init(sequelize);
 Post.init(sequelize);
 Like.init(sequelize);
-Image.init(sequelize);
 
 User.associate(db);
 Post.associate(db);
 Like.associate(db);
-Image.associate(db);
 
 module.exports = db;
