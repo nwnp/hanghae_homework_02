@@ -10,6 +10,28 @@ const {
 const isLoggedIn = require("../middlewares/isLoggedIn");
 
 // signup
+/**
+ * @swagger
+ * /api/register:
+ *   post:
+ *     description: 회원가입
+ *     tags: [User]
+ *     produces:
+ *     - "application/json"
+ *     parameters:
+ *     - name: "nickname"
+ *       type: "string"
+ *     - name: "password"
+ *       type: "string"
+ *     - name: "passwordCheck"
+ *       type: "string"
+ *     - name: "email"
+ *       type: "string"
+ *     responses:
+ *       "200":
+ *         description: "successful operation"
+ *
+ */
 router.post(
   "/register",
   isLoggedIn,
@@ -30,7 +52,24 @@ router.post(
 );
 
 // login
-// router.post("/login", isLoggedIn, userController.login);
+/**
+ * @swagger
+ * /api/login:
+ *   post:
+ *     description: 로그인
+ *     tags: [User]
+ *     produces:
+ *     - "application/json"
+ *     parameters:
+ *     - name: "email"
+ *       type: "string"
+ *     - name: "password"
+ *       type: "string"
+ *     responses:
+ *       "200":
+ *         description: "successful operation"
+ *
+ */
 router.post("/login", isLoggedIn, userController.login);
 
 module.exports = router;
