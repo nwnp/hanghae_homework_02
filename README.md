@@ -19,7 +19,7 @@
 - mysql2, sequelize, sequelize-cli
 - dotenv
 - morgan
-- body-parser, cookie-parser, express-session
+- body-parser, cookie-parser
 - cors
 - swagger-jsdoc, swagger-ui-express
 - devDependencies: nodemon
