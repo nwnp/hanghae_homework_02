@@ -29,7 +29,7 @@
 
 ## ERD
 
-<img src="./uploads/erd.png">
+<img src="./erd.png">
 
 ## Install
 
