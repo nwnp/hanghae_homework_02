@@ -29,7 +29,7 @@
 
 ## ERD
 
-<img src="./hw2_erd.png">
+<img src="./uploads/erd.png">
 
 ## Install
 
