@@ -34,6 +34,10 @@
 ## Image 저장
 
 <img src="./dra.png">
+- 게시글 등록 요청이 오면 auth-middleware를 지나간다
+- auth-middleware에서 유저 인증이 검증이 되면 upload middleware를 지나간다
+- 업로드 미들웨어에서 S3에 이미지 원본 파일 저장
+- 업로드 미들웨어를 빠져나오면 비즈니스 로직 부분에서 이미지를 저장한 S3의 경로를 저장
 
 ## Install
 
