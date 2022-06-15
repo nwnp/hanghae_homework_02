@@ -31,6 +31,10 @@
 
 <img src="./erd.png">
 
+## Image 저장
+
+<img src="./dra.png">
+
 ## Install
 
 ```console
