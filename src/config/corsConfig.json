@@ -1,4 +1,4 @@
 {
-  "origin": ["http://localhost:3000"],
+  "origin": ["*"],
   "methods": ["OPTIONS", "GET", "POST", "HEAD", "PUT", "DELETE"]
 }
